@@ -1,0 +1,31 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+
+.*pran.*    { printf("Rejected\n"); }
+.*          { printf("Accepted\n"); }
+
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+int main()
+{
+    printf("Enter a string: ");
+    yylex();
+
+    return 0;
+}
+
+/*
+Linux commands to run:
+
+flex program.l
+gcc lex.yy.c -o program
+./program
+*/
