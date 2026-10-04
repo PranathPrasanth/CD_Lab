@@ -1,0 +1,128 @@
+========================================
+      LEX + YACC PROGRAM
+      Expression Tree
+========================================
+
+
+---------- LEX FILE: tree.l ----------
+
+%{
+#include "y.tab.h"
+%}
+
+%%
+
+[a-zA-Z][a-zA-Z0-9]*    { return ID; }
+"+"                     { return '+'; }
+[ \t]                   ;
+\n                      { return '\n'; }
+
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+
+
+---------- YACC FILE: tree.y ----------
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+int yylex();
+void yyerror(char *s);
+%}
+
+%token ID
+
+%%
+
+E : E '+' T
+    {
+        printf("Create '+' Node\n");
+    }
+
+  | T
+  ;
+
+T : ID
+    {
+        printf("Create ID Node\n");
+    }
+  ;
+
+%%
+
+void yyerror(char *s)
+{
+    printf("Syntax Error\n");
+}
+
+int main()
+{
+    yyparse();
+    return 0;
+}
+
+
+/*
+========================================
+        LINUX COMMANDS TO RUN
+========================================
+
+IMPORTANT:
+Although both programs are stored in
+this ONE GitHub file, they must be saved
+as TWO files before running.
+
+1. Create the LEX file:
+
+nano tree.l
+
+Copy the section marked:
+"LEX FILE: tree.l"
+
+
+2. Create the YACC file:
+
+nano tree.y
+
+Copy the section marked:
+"YACC FILE: tree.y"
+
+
+3. Generate YACC files:
+
+yacc -d tree.y
+
+
+4. Generate LEX C file:
+
+flex tree.l
+
+
+5. Compile both:
+
+gcc y.tab.c lex.yy.c -o tree
+
+
+6. Run:
+
+./tree
+
+
+Example input:
+
+a+b
+
+Expected output:
+
+Create ID Node
+Create ID Node
+Create '+' Node
+
+========================================
+*/
