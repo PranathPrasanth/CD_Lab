@@ -1,0 +1,84 @@
+========================================
+        LEX + YACC PROGRAM
+        Variable Validation
+========================================
+
+
+---------- LEX FILE: variable.l ----------
+
+%{
+#include "y.tab.h"
+%}
+
+%%
+
+[a-zA-Z][a-zA-Z0-9]*    { return ID; }
+\n                      { return '\n'; }
+
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+
+---------- YACC FILE: variable.y ----------
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+void yyerror(char *s);
+int yylex();
+%}
+
+%token ID
+
+%%
+
+S : ID '\n' { printf("Valid Variable\n"); }
+  ;
+
+%%
+
+void yyerror(char *s)
+{
+    printf("Invalid Variable\n");
+}
+
+int main()
+{
+    printf("Enter variable:\n");
+
+    yyparse();
+
+    return 0;
+}
+
+
+/*
+========================================
+        LINUX COMMANDS TO RUN
+========================================
+
+1. Create the LEX file:
+   nano variable.l
+
+2. Create the YACC file:
+   nano variable.y
+
+3. Generate YACC files:
+   yacc -d variable.y
+
+4. Generate LEX C file:
+   flex variable.l
+
+5. Compile both:
+   gcc y.tab.c lex.yy.c -o variable
+
+6. Run:
+   ./variable
+
+========================================
+*/
