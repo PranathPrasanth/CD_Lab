@@ -1,0 +1,34 @@
+#include <stdio.h>
+
+int main()
+{
+    int n, i, j;
+    int e[10][10];
+
+    printf("Enter number of states: ");
+    scanf("%d", &n);
+
+    printf("Enter epsilon transition matrix:\n");
+
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            scanf("%d", &e[i][j]);
+
+    printf("\nEquivalent NFA (without epsilon):\n");
+
+    for (i = 0; i < n; i++)
+    {
+        printf("State %d -> { ", i);
+        printf("%d ", i);
+
+        for (j = 0; j < n; j++)
+        {
+            if (e[i][j])
+                printf("%d ", j);
+        }
+
+        printf("}\n");
+    }
+
+    return 0;
+}
