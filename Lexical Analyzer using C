@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    char c, s[50];
+    char *kw[] = {"int","float","char","double","void","if","else",
+                  "for","while","do","switch","case","break","continue","return"};
+    int i;
+
+    while ((c = getchar()) != EOF) {
+
+        if (isspace(c))
+            continue;
+
+        else if (isalpha(c)) {
+            i = 0;
+            do {
+                s[i++] = c;
+                c = getchar();
+            } while (isalnum(c));
+
+            s[i] = '\0';
+            ungetc(c, stdin);
+
+            for (i = 0; i < 15 && strcmp(s, kw[i]); i++);
+
+            printf("%s: %s\n", i < 15 ? "Keyword" : "Identifier", s);
+        }
+
+        else if (isdigit(c)) {
+            printf("Number: ");
+
+            do {
+                printf("%c", c);
+                c = getchar();
+            } while (isdigit(c));
+
+            ungetc(c, stdin);
+            printf("\n");
+        }
+
+        else
+            printf("Operator/Special Symbol: %c\n", c);
+    }
+
+    return 0;
+}
