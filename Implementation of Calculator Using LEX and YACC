@@ -1,0 +1,111 @@
+========================================
+      LEX + YACC PROGRAM
+      Arithmetic Expression
+========================================
+
+
+---------- LEX FILE: expression.l ----------
+
+%{
+#include "y.tab.h"
+#include <stdlib.h>
+%}
+
+%%
+
+[0-9]+          { yylval = atoi(yytext); return NUM; }
+[+\-*/()]       { return yytext[0]; }
+\n              { return '\n'; }
+
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+
+
+---------- YACC FILE: expression.y ----------
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+int yylex();
+void yyerror(char *s);
+%}
+
+%token NUM
+
+%%
+
+input : expr '\n' { printf("Result = %d\n", $1); }
+      ;
+
+expr : expr '+' expr { $$ = $1 + $3; }
+     | expr '-' expr { $$ = $1 - $3; }
+     | expr '*' expr { $$ = $1 * $3; }
+     | expr '/' expr { $$ = $1 / $3; }
+     | '(' expr ')'  { $$ = $2; }
+     | NUM            { $$ = $1; }
+     ;
+
+%%
+
+void yyerror(char *s)
+{
+    printf("Invalid Expression\n");
+}
+
+int main()
+{
+    printf("Enter expression:\n");
+    yyparse();
+
+    return 0;
+}
+
+
+/*
+========================================
+        LINUX COMMANDS TO RUN
+========================================
+
+Create the two files:
+
+nano expression.l
+nano expression.y
+
+Generate YACC files:
+
+yacc -d expression.y
+
+Generate LEX file:
+
+flex expression.l
+
+Compile both:
+
+gcc y.tab.c lex.yy.c -o expression
+
+Run:
+
+./expression
+
+========================================
+
+Example:
+
+Enter expression:
+10+5*2
+Result = 20
+
+Another example:
+
+Enter expression:
+(10+5)*2
+Result = 30
+
+========================================
+*/
