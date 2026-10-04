@@ -1,0 +1,46 @@
+#include <stdio.h>
+
+void main(){
+    
+    int n,i,j;
+    int trans[10][2];
+    int final[10];
+    
+    printf("Enter no of states: ");
+    scanf("%d",&n);
+    
+    printf("Enter transitions for 0 and 1: \n");
+    
+    for(i=0;i<n;i++){
+        
+        printf("State %d\n",i);
+        scanf("%d%d",&trans[i][0],&trans[i][1]);
+    }
+    
+    printf("\nEnter final and non-final states: (0 = Non-Final, 1 = Final): \n");
+    
+    for(i=0;i<n;i++){
+        
+        scanf("%d",&final[i]);
+    }
+    printf("\nMinimized DFA: \n");
+    printf("\nNon-Final states:");
+    
+    for(i=0;i<n;i++){
+        
+        if(final[i]==0){
+            printf("%d ",i);
+        }
+    }
+    
+    printf("\nFinal states: ");
+    
+    for(i=0;i<n;i++){
+        
+        if(final[i]==1){
+            
+            printf("%d ",i);
+        }
+    }
+    
+}
