@@ -1,0 +1,134 @@
+========================================
+       LEX + YACC PROGRAM
+       FOR Loop Validation
+========================================
+
+
+---------- LEX FILE: for.l ----------
+
+%{
+#include "y.tab.h"
+%}
+
+%%
+
+for                         { return FOR; }
+[a-zA-Z][a-zA-Z0-9]*        { return ID; }
+[0-9]+                      { return NUM; }
+"++"                        { return INC; }
+"="                         { return '='; }
+"<"                         { return '<'; }
+";"                         { return ';'; }
+"("                         { return '('; }
+")"                         { return ')'; }
+[ \t\n]                     ;
+
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+
+
+---------- YACC FILE: for.y ----------
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+int yylex();
+void yyerror(char *s);
+%}
+
+%token FOR ID NUM INC
+
+%%
+
+stmt :
+    FOR '(' ID '=' NUM ';' ID '<' NUM ';' ID INC ')'
+    {
+        printf("Valid FOR Statement\n");
+    }
+    ;
+
+%%
+
+void yyerror(char *s)
+{
+    printf("Invalid FOR Statement\n");
+}
+
+int main()
+{
+    yyparse();
+    return 0;
+}
+
+
+/*
+========================================
+        LINUX COMMANDS TO RUN
+========================================
+
+IMPORTANT:
+This GitHub file contains both LEX and
+YACC programs, but for execution they
+must be saved as two separate files.
+
+1. Create the LEX file:
+
+nano for.l
+
+Copy the section:
+"LEX FILE: for.l"
+
+
+2. Create the YACC file:
+
+nano for.y
+
+Copy the section:
+"YACC FILE: for.y"
+
+
+3. Generate YACC files:
+
+yacc -d for.y
+
+
+4. Generate LEX C file:
+
+flex for.l
+
+
+5. Compile both:
+
+gcc y.tab.c lex.yy.c -o for
+
+
+6. Run:
+
+./for
+
+
+Example valid input:
+
+for(i=0;i<10;i++)
+
+Expected output:
+
+Valid FOR Statement
+
+
+Example invalid input:
+
+for(i=0;i<10)
+
+Expected output:
+
+Invalid FOR Statement
+
+========================================
+*/
